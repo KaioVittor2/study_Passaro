@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;  }
+    </style>
+</head>
+<body>
+
+<script>
+
+var config = {    // Variavel config sendo determinada
+    type: Phaser.AUTO,
+    width: 800,    // largura da página
+    height: 600,   // Altura da página
+    //backgrundColor: '#f23412'
+
+    scene: {
+        preload: preload,   // utilizada para carregar recursos
+        create: create,    // utilizada para iniciar objetos do jogo
+        update: update    // lógica de atualização do jogo
+    }
+};
+
+var game = new Phaser.Game(config); //criar um game com as configs definidas anteriormente
+
+var passarinho; // criar variável passarinho
+var minhoquinha;
+var surpresa;
+
+function preload() {
+    this.load.image('bg', 'assets/bg_space.png');  // carregando o cenário
+    this.load.spritesheet('bird', 'assets/bird-purple.png', { frameWidth: 75, frameHeight: 75 });
+    this.load.spritesheet('minhoca', 'assets/Minhoquinha.png', { frameWidth: 1200, frameHeight: 1200 });
+    this.load.spritesheet('surpresa', 'assets/bird-red.png', { frameWidth: 75, frameHeight: 75 });
+}
+
+function create() {
+    this.add.image(400, 300, 'bg').setScale(1.2);  //iniciando o cenário na página
+    passarinho = this.add.sprite(100, 100, 'bird').setScale(1.3);  //objeto "interativo, colisivo, animativo, eventivo" inserido na variável
+    surpresa = this.add.sprite(1, 100, "surpresa").setScale(1.3)
+
+    this.anims.create({ //comando da animação
+        key: 'fly', //nome da animação
+        frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 7}), //indicamos quais o frames da animação. 8 frames
+        frameRate: 15, //quantidade de frames em 1 segundo (FPS)
+        repeat: -1 // (-1 indica repetição contínua, 0 indica sem repetição, e um número positivo indica a quantidade de repetições).
+    });
+
+    this.anims.create({ //comando da animação
+        key: 'fly2', //nome da animação
+        frames: this.anims.generateFrameNumbers('surpresa', { start: 0, end: 7}), //indicamos quais o frames da animação. 8 frames
+        frameRate: 15, //quantidade de frames em 1 segundo (FPS)
+        repeat: -1 // (-1 indica repetição contínua, 0 indica sem repetição, e um número positivo indica a quantidade de repetições).
+    });
+
+    passarinho.anims.play('fly', true);      //Ativar a animação 'fly' no passarinho
+    surpresa.anims.play('fly2', true);
+
+    minhoquinha = this.add.sprite(700, 560, 'minhoca').setScale(0.2);
+}
+
+function update() { 
+
+    if (passarinho.x === 100) { 
+        passarinho.setFlip(false, false);
+        passarinho.ida = true;
+    } // O passarinho estar na virado na posição inicial da imagem "para a direita"
+
+    if (passarinho.x < 700 && passarinho.ida === true) {
+        console.log("o passarinho está indo para a direita");
+        passarinho.x += 5;
+    } // O passarinho vai se mover para a direita se ambas as condições forem verdadeiras
+
+    if (passarinho.x === 700) {
+        passarinho.setFlip(true, false);
+        passarinho.ida = false;
+    } // O passarinho estar na virado na posição contrária a inicial da imagem "para a esqueda"
+
+    if (passarinho.x > 100 && passarinho.ida === false) {
+        console.log("o passarinho está indo para a esquerda");
+        passarinho.x -= 5;
+    } // O passarinho vai se mover para a esquerda se ambas as condições forem falsas
+
+
+
+    if (passarinho.y === 100) {
+        passarinho.subida = true;
+    } // Define como verdadeiro o comando subida
+
+    if (passarinho.y < 500 && passarinho.subida === true) {
+        console.log("o passarinho está indo para cima");
+        passarinho.y += 5;
+    } // O passarinho vai se mover para cima se ambas as condições forem verdadeiras
+
+    if (passarinho.y === 500) {
+        passarinho.subida = false;
+    } // Define como falso o comando subida
+
+    if (passarinho.y > 100 && passarinho.subida === false) {
+        console.log("o passarinho está indo para baixo");
+        passarinho.y -= 5;
+    } // O passarinho vai se mover para baixo se ambas as condições forem falsas
+
+
+
+    if (passarinho.subida == false) {
+        minhoquinha.y -= 1;}
+
+    else{
+        minhoquinha.y += 1;}
+
+    if (passarinho.ida == false) {
+        minhoquinha.y -= 1;}
+
+    else{
+        minhoquinha.y += 1;}
+
+    for (i = 0; i <= 550; i++)
+        surpresa.x += 0.005
+        
+}
+
+</script>
+
+</body>
+</html>
